@@ -1,16 +1,27 @@
 from homeassistant.components.sensor import SensorEntity
-from homeassistant.helpers.entity import Entity
+from homeassistant.config_entries import ConfigEntry
 from .const import DOMAIN
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
-    coordinator = hass.data[DOMAIN]
-    
+    store = hass.data.get(DOMAIN)
+    if isinstance(store, dict) and store:
+        coordinator = next(iter(store.values()))
+    else:
+        coordinator = store
     entities = [
         AdGuardDNSSensor(coordinator, "Total Queries", "total_queries", "mdi:dns"),
         AdGuardDNSSensor(coordinator, "Blocked Queries", "blocked_queries", "mdi:dns-lock"),
         AdGuardDNSTopDomainsSensor(coordinator)
     ]
-    
+    async_add_entities(entities, True)
+
+async def async_setup_entry(hass, entry: ConfigEntry, async_add_entities):
+    coordinator = hass.data[DOMAIN][entry.entry_id]
+    entities = [
+        AdGuardDNSSensor(coordinator, "Total Queries", "total_queries", "mdi:dns"),
+        AdGuardDNSSensor(coordinator, "Blocked Queries", "blocked_queries", "mdi:dns-lock"),
+        AdGuardDNSTopDomainsSensor(coordinator)
+    ]
     async_add_entities(entities, True)
 
 class AdGuardDNSSensor(SensorEntity):
