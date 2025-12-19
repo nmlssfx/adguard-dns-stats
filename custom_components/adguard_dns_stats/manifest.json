@@ -1,0 +1,16 @@
+{
+    "domain": "adguard_dns_stats",
+    "name": "AdGuard DNS Statistics",
+    "documentation": "https://github.com/nmlssfx/adguard-dns-stats",
+    "issue_tracker": "https://github.com/nmlssfx/adguard-dns-stats/issues",
+    "dependencies": [],
+    "codeowners": [
+        "@nmlssfx"
+    ],
+    "requirements": [
+        "requests==2.32.5"
+    ],
+    "version": "1.0.0",
+    "iot_class": "cloud_polling",
+    "integration_type": "service"
+}
